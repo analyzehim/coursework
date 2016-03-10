@@ -1,5 +1,6 @@
 import numpy as np
 import time
+import scipy.optimize
 
 m = [0.0101110, 0.0043532, 0.0137058]
 V = [[0.00324625, 0.00022983, 0.00420395],
@@ -13,13 +14,18 @@ def generate_y():
         y = np.random.multivariate_normal(m, V, q)
         return y
 
-def F_beta(x,alpha):
+def F_beta(x):
+    print x
+    if (x[0] < 0) or (x[1] < 0) or (x[2] < 0) or (x[0] + x[1] > 1):
+        return 10000
+        alpha = x[2]
+        x[2] = 1 - x[0] - x[1]
         ans = 0.0
         ans += alpha
         sum_loss = 0.0
         y = generate_y()
         for i in range(q):
-                loss = (-1) * x.dot(y[i]) - alpha
+                loss = (-1) * x[:-1].dot(y[i]) - alpha
                 if loss > 0:
                         sum_loss += loss
         sum_loss/=(q*(1-beta))
@@ -47,9 +53,11 @@ def F_minimize():
         return F_beta_min
 
 time1 = time.time()
-print F_beta(np.array([0.35250, 0.15382, 0.49368]), 0.06795)
-print time.time() - time1
+
 
         
+#res = scipy.optimize.fmin(F_beta, np.array([0, 1, 0.06795]))
 
-        
+#print res
+  #print F_beta(np.array([0.35250, 0.15382, 0.49368,0.06795]))
+print time.time() - time1      
