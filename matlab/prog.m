@@ -1,0 +1,11 @@
+%fmincon(fun,x0,A,b,Aeq,beq,lb,ub)
+
+v = [1 0 0 0.5];
+disp('Hi')
+global cons;
+cons = 2;
+[x,fval] = fmincon(@myfun,v,[0 0 0 0],0,[1 1 1 0],1, [0 0 0 0], [1 1 1 100]);
+disp('f = ')
+disp (fval)
+disp ('x')
+disp(x)
